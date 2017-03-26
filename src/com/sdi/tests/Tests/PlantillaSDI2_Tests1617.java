@@ -20,6 +20,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.Select;
 
+import com.sdi.tests.pageobjects.PO_AltaForm;
 import com.sdi.tests.pageobjects.PO_AutoLogin;
 import com.sdi.tests.pageobjects.PO_crearTarea;
 import com.sdi.tests.utils.SeleniumUtils;
@@ -76,6 +77,11 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.textoNoPresentePagina(driver, "Reiniciar base de datos");
 	}
+	private void reiniciaBase(){
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:borrarBase");
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:borrarSi", 20);
+		SeleniumUtils.click(driver, "form-principal:borrarSi");
+	}
 	//PRUEBAS
 	//ADMINISTRADOR
 	//PR01: Autentificar correctamente al administrador.
@@ -84,7 +90,7 @@ public class PlantillaSDI2_Tests1617 {
 		iniciaUsuario("admin1","admin1");
 		
 		//estamos en index y existe la opción reiniciar base de datos
-		//SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:linkalta");
+		//SeleniumUtils.menuHover(driver, "form-cabecera:misubmenu1");
 		SeleniumUtils.textoPresentePagina(driver, "Reiniciar base de datos");
     }
 	//PR02: Fallo en la autenticación del administrador por introducir mal el login.
@@ -114,10 +120,7 @@ public class PlantillaSDI2_Tests1617 {
 		iniciaUsuario("admin1", "admin1");
 		
 		//Reiniciamos la base
-		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:borrarBase");
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:borrarSi", 20);
-		//driver.findElement(By.id("form-principal:borrarSi")).click();
-		SeleniumUtils.click(driver, "form-principal:borrarSi");
+		reiniciaBase();
 
 		//Pinchamos en listado
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
@@ -167,10 +170,11 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
 		
 		//comprobar que user1 está habilitado
-
+		assertEquals("ENABLED", driver.findElement(By.xpath("//tbody[@id='form:tablalistado_data']/tr[2]/td[6]/a")).getText());
 		
 		//deshabilitar user1
-	    
+		driver.findElement(By.id("form:tablalistado:1:j_idt27")).click();
+		
 	    //Cerrar sesión
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-pie:cerrarSesion", "form-pie:cerrarSesion");
 
@@ -208,10 +212,10 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
 
 		//orden descendente
-		SeleniumUtils.click(driver, "form:tablalistado:login");
+		SeleniumUtils.click(driver, "form:tablalistado:login:headerLogin");
 		
 		//comprueba el primero es admin
-		By primerLogin = By.id("form:tablalistado:0:headerLogin");
+		By primerLogin = By.id("form:tablalistado:0:login:headerLogin");
 		assertEquals("admin1",driver.findElement(primerLogin).getText());
 		
 		//orden ascendente
@@ -289,22 +293,52 @@ public class PlantillaSDI2_Tests1617 {
 	//PR12: Crear una cuenta de usuario normal con datos válidos.
 	@Test
     public void prueba12() {
-		assertTrue(false);
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:nuevoUser");
+		
+		new PO_AltaForm().rellenaFormulario(driver, "nuevoUsuario", "usuario@nuevo.com", "nuevoUsuario1", "nuevoUsuario1");
+		
+		SeleniumUtils.click(driver, "form-principal:boton");
+		
+		//comprueba que estamos en index
+		SeleniumUtils.textoPresentePagina(driver, "Visor de Tareas");
+
     }
 	//PR13: Crear una cuenta de usuario normal con login repetido.
 	@Test
     public void prueba13() {
-		assertTrue(false);
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:nuevoUser");
+		
+		new PO_AltaForm().rellenaFormulario(driver, "admin1", "usuario@nuevo.com", "nuevoUsuario1", "nuevoUsuario1");
+		
+		SeleniumUtils.click(driver, "form-principal:boton");
+		
+		//comprueba que estemos en el registro todavía
+		estoyEnLog();
     }
 	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
 	@Test
     public void prueba14() {
-		assertTrue(false);
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:nuevoUser");
+		
+		new PO_AltaForm().rellenaFormulario(driver, "tarari", "usuario@nuevom", "nuevoUsuario1", "nuevoUsuario1");
+		
+		SeleniumUtils.click(driver, "form-principal:boton");
+		
+		//comprueba que estemos en el registro todavía
+		estoyEnLog();
     }
 	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
 	@Test
     public void prueba15() {
-		assertTrue(false);
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:nuevoUser");
+		
+		new PO_AltaForm().rellenaFormulario(driver, "tarari", "usuario@nuevo.com", "1234", "1234");
+		
+		SeleniumUtils.click(driver, "form-principal:boton");
+		
+		//comprueba que estemos en el registro todavía
+		estoyEnLog();
+		SeleniumUtils.textoPresentePagina(driver,"8");
     }
 	//USUARIO
 	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
@@ -331,7 +365,7 @@ public class PlantillaSDI2_Tests1617 {
 		
 		//Llega al listados con exito ahora necesito q pagine
 		By id = By.xpath("//div[@id='form:tablalistadoMain_paginator_top']/span[4]/span[2]");
-		
+
 		WebElement page2 = driver.findElement(id);
 		page2.click();
 		
