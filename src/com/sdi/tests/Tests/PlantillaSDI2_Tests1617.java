@@ -15,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.support.ui.Select;
 
 import com.sdi.tests.pageobjects.PO_AltaForm;
 import com.sdi.tests.pageobjects.PO_AutoLogin;
@@ -226,22 +227,122 @@ public class PlantillaSDI2_Tests1617 {
 	//PR19: Funcionamiento correcto de la ordenación por categoría.
 	@Test
     public void prueba19() {
-		assertTrue(false);
+		
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 10); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoHoy");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id = By.id("form:tablalistadoMain:j_idt26");
+		
+		WebElement title = driver.findElement(id);
+		title.click();
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "1", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 11", 20); 
     }
 	//PR20: Funcionamiento correcto de la ordenación por fecha planeada.
 	@Test
     public void prueba20() {
-		assertTrue(false);
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 10); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoHoy");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id = By.id("form:tablalistadoMain:j_idt17");
+		
+		WebElement title = driver.findElement(id);
+		title.click();
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "1", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 11", 20); 
     }
 	//PR21: Comprobar que las tareas que no están en rojo son las de hoy y además las que deben ser.
 	@Test
     public void prueba21() {
-		assertTrue(false);
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 10); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoHoy");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 1", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 2", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 3", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 4", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 5", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 6", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 7", 20); 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 8", 20); 
+		
     }
 	//PR22: Comprobar que las tareas retrasadas están en rojo y son las que deben ser.
 	@Test
     public void prueba22() {
-		assertTrue(false);
+		
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 10); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoHoy");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		//String text = driver.findElement(By.className("dataRow")).getText();
+		//System.out.println(text);
+		//text.contains("Sun Mar 26 00:00:00 CET 2017");
+		
     }
 	//PR23: Comprobar que las tareas de hoy y futuras no están en rojo y que son las que deben ser.
 	@Test
@@ -281,7 +382,59 @@ public class PlantillaSDI2_Tests1617 {
 	//PR30: Editar el nombre, y categoría de una tarea (se le cambia a categoría1) de la lista Inbox y comprobar que las tres pseudolista se refresca correctamente.
 	@Test
     public void prueba30() {
-		assertTrue(false);
+		
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 15); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoInbox");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+
+		By id = By.cssSelector("span.ui-icon.ui-icon-pencil");
+		
+		WebElement title = driver.findElement(id);
+		title.click();
+		
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id2 = By.id("form:tablalistadoMain:0:tittleInput");
+		
+		WebElement input = driver.findElement(id2);
+		input.clear();
+		input.sendKeys("Editada");
+		
+		By id3 = By.name("form:tablalistadoMain:0:j_idt30");
+		
+		Select dropdown = new Select(driver.findElement(id3));
+		dropdown.selectByVisibleText("1");
+		
+		By id4 = By.xpath("//div[@id='form:tablalistadoMain:0:editColumn']/span[2]");
+		WebElement input3 = driver.findElement(id4);
+		input3.click();
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoHoy");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Editada", 20); 
     }
 	//PR31: Editar el nombre, y categoría (Se cambia a sin categoría) de una tarea de la lista Hoy y comprobar que las tres pseudolistas se refrescan correctamente.
 	@Test
