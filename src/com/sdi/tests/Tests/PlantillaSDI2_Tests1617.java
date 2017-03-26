@@ -17,7 +17,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.Select;
 
-import com.sdi.tests.pageobjects.PO_AltaForm;
 import com.sdi.tests.pageobjects.PO_AutoLogin;
 import com.sdi.tests.utils.SeleniumUtils;
 
@@ -40,7 +39,7 @@ public class PlantillaSDI2_Tests1617 {
 		FirefoxBinary ffBinary = new FirefoxBinary(pathToBinary);
 		FirefoxProfile firefoxProfile = new FirefoxProfile();       
 		driver = new FirefoxDriver(ffBinary,firefoxProfile);
-		driver.get("http://localhost:8180/sdi2-13");
+		driver.get("http://localhost:8280/sdi2-13");
 		//Este código es para ejecutar con una versión instalada de Firex 46.0 
 		//driver = new FirefoxDriver();
 		//driver.get("http://localhost:8180/sdi2-n");			
@@ -52,62 +51,236 @@ public class PlantillaSDI2_Tests1617 {
 		driver.quit();
 	}
 
+	/**
+	 * inicia sesión con un usuario. Espera un ratillo antes de acabar.
+	 * @param name login del usuario
+	 * @param password contraseña del usuario
+	 */
+	private void iniciaUsuario(String name, String password){
+		// introducir datos
+		new PO_AutoLogin().rellenaFormulario(driver, name, password);
+		
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 50);
+	}
+	private void estoyEnLog(){
+		SeleniumUtils.menuHover(driver, "form-cabecera:misubmenu1");
+		SeleniumUtils.textoPresentePagina(driver, "Registrarse");
+		SeleniumUtils.textoPresentePagina(driver, "Iniciar");
+		SeleniumUtils.textoPresentePagina(driver, "CONTRASEÑA");
+		
+		SeleniumUtils.textoNoPresentePagina(driver, "Visor de Tareas");
+		
+		SeleniumUtils.textoNoPresentePagina(driver, "Reiniciar base de datos");
+	}
 	//PRUEBAS
 	//ADMINISTRADOR
 	//PR01: Autentificar correctamente al administrador.
 	@Test
     public void prueba01() {
-		assertTrue(false);	
+		iniciaUsuario("admin1","admin1");
+		
+		//estamos en index y existe la opción reiniciar base de datos
+		//SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:linkalta");
+		SeleniumUtils.textoPresentePagina(driver, "Reiniciar base de datos");
     }
 	//PR02: Fallo en la autenticación del administrador por introducir mal el login.
 	@Test
     public void prueba02() {
-		assertTrue(false);
+		//introducir datos
+		new PO_AutoLogin().rellenaFormulario(driver, "admin!", "admin1");
+		
+		//Esperamos a que se cargue la pagina
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 15); 
+				
+		//seguimos en log
+		estoyEnLog();
     }
 	//PR03: Fallo en la autenticación del administrador por introducir mal la password.
 	@Test
     public void prueba03() {
-		assertTrue(false);
+		// como medida de seguridad, no se le notifica al usuario qué es lo que 
+		// ha escrito mal. Si nos dice que la contraseña está mal, estamos 
+		// reconociendo que existe un usuario con el nombre introducido.
+		// por ello, la prueba02 y la prueba03 son la misma
+		prueba02();
     }
 	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
 	@Test
     public void prueba04() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		//Reiniciamos la base
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:borrarBase");
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:borrarSi", 20);
+		//driver.findElement(By.id("form-principal:borrarSi")).click();
+		SeleniumUtils.click(driver, "form-principal:borrarSi");
+
+		//Pinchamos en listado
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+		
+		//Esperamos a que se cargue la pagina
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:tablaListado", 10);
+		
+		//Comprobamos que están los usuarios admin1, user1, user2, user3
+		SeleniumUtils.textoPresentePagina(driver, "admin1");
+		SeleniumUtils.textoPresentePagina(driver, "user1");
+		SeleniumUtils.textoPresentePagina(driver, "user2");
+		SeleniumUtils.textoPresentePagina(driver, "user3");
+		
+		//Todos están habilitados
+		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
+		
+		//Comrpobamos que no está el usuario user4
+		SeleniumUtils.textoNoPresentePagina(driver, "user4");
     }
 	//PR05: Visualizar correctamente la lista de usuarios normales. 
 	@Test
     public void prueba05() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		//Pinchamos en listado
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+				
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form:tablalistado", 15);
+				
+		//Comprobamos que están los usuarios user1, user2, user3
+		SeleniumUtils.textoPresentePagina(driver, "user1");
+		SeleniumUtils.textoPresentePagina(driver, "user2");
+		SeleniumUtils.textoPresentePagina(driver, "user3");
+				
+		//Todos están habilitados
+		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
+				
+		//Comprobamos que no está el usuario user4
+		SeleniumUtils.textoNoPresentePagina(driver, "user4");
     }
 	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
 	@Test
     public void prueba06() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+		
+		//comprobar que user1 está habilitado
+
+		
+		//deshabilitar user1
+	    
+	    //Cerrar sesión
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-pie:cerrarSesion", "form-pie:cerrarSesion");
+
+		//iniciar sesión con el usuario deshabilitado
+	    iniciaUsuario("user1", "user1");
+	    
+	    //pero no cambia de página
+	    estoyEnLog();
     }
 	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
 	@Test
     public void prueba07() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		//comprobar que user1 está deshabilitado
+	    assertEquals("ENABLED", driver.findElement(By.xpath("//tbody[@id='form:tablalistado_data']/tr[2]/td[4]")).getText());
+
+		//habilitar user1
+	    
+	    //Cerrar sesión
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-pie:cerrarSesion", "form-pie:cerrarSesion");
+
+		//iniciar sesión con el usuario deshabilitado
+	    iniciaUsuario("user1", "user1");
+	    
+	    //y ahora estoy en el index
+		SeleniumUtils.textoPresentePagina(driver,"Visor de Tareas");
+
     }
 	//PR08: Ordenar por Login
 	@Test
     public void prueba08() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+
+		//orden descendente
+		SeleniumUtils.click(driver, "form:tablalistado:login");
+		
+		//comprueba el primero es admin
+		By primerLogin = By.id("form:tablalistado:0:headerLogin");
+		assertEquals("admin1",driver.findElement(primerLogin).getText());
+		
+		//orden ascendente
+		SeleniumUtils.click(driver, "form:tablalistado:headerLogin");
+		
+		//comprueba el primero es user3
+		primerLogin = By.id("form:tablalistado:0:headerLogin");
+		assertEquals("user3",driver.findElement(primerLogin).getText());
+		
     }
 	//PR09: Ordenar por Email
 	@Test
     public void prueba09() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+
+		//orden descendente
+		SeleniumUtils.click(driver, "form:tablalistado:login");
+		
+		//comprueba el primero es admin
+		By primerLogin = By.id("form:tablalistado:0:headerEmail");
+		assertEquals("admin1",driver.findElement(primerLogin).getText());
+		
+		//orden ascendente
+		SeleniumUtils.click(driver, "form:tablalistado:headerEmail");
+		
+		//comprueba el primero es user3
+		primerLogin = By.id("form:tablalistado:0:headerLogin");
+		assertEquals("user3",driver.findElement(primerLogin).getText());
     }
 	//PR10: Ordenar por Status
 	@Test
     public void prueba10() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+
+		//orden descendente
+		SeleniumUtils.click(driver, "form:tablalistado:login");
+		
+		//comprueba el primero es admin
+		By primerLogin = By.id("form:tablalistado:0:headerStatus");
+		assertEquals("admin1",driver.findElement(primerLogin).getText());
+		
+		//orden ascendente
+		SeleniumUtils.click(driver, "form:tablalistado:headerStatus");
+		
+		//comprueba el primero sigue siendo admin1
+		primerLogin = By.id("form:tablalistado:0:headerLogin");
+		assertEquals("admin3",driver.findElement(primerLogin).getText());
     }
 	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
 	@Test
     public void prueba11() {
-		assertTrue(false);
+		iniciaUsuario("admin1", "admin1");
+		
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
+		
+		//borramos user2
+		driver.findElement(By.id("form:tablalistado:2:j_idt27")).click();
+		
+		//confirmar
+		driver.findElement(By.id("form-principal:borrarSi")).click();
+		
+		//cerramos sesión
+		SeleniumUtils.click(driver, "form-pie:cerrarSesion");
+		
+		//intentamos iniciar sesión con user2
+		iniciaUsuario("user2", "user2");
+		
+		//no podemos
+		estoyEnLog();
     }
 	//PR12: Crear una cuenta de usuario normal con datos válidos.
 	@Test
@@ -144,7 +317,7 @@ public class PlantillaSDI2_Tests1617 {
 		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
 		
 		//Esperamos a que se cargue la pagina 
-		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 15); 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 50); 
 		
 		//Pinchamos la opción de menu Alta Alumno
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoInbox");

@@ -28,6 +28,20 @@ public class SeleniumUtils {
 			driver.findElement(locator).click();			
 		}
 
+		//Mueve el ratón a la opción de menú submenu(desplegable). Evento hover
+		static public void menuHover(WebDriver driver, String submenu){
+			//Pasamos el raton por el submenu de Gestion de alumnos	para
+			//que aparezca el menu desplegable
+			Actions builder = new Actions(driver);
+			WebElement hoverElement = driver.findElement(By.id(submenu));
+			builder.moveToElement(hoverElement).perform();	
+		}
+		
+		static public void click(WebDriver driver, String click){
+			//Pinchamos la opcion opcionclick
+			By locator = By.id(click);
+			driver.findElement(locator).click();
+		}
 		static public void textoPresentePagina(WebDriver driver, String texto)
 		{
 			List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + texto + "')]"));		
