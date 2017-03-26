@@ -77,7 +77,21 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.textoNoPresentePagina(driver, "Reiniciar base de datos");
 	}
+	private void reiniciaBaseB(){
+		By back = By.id("form-pie:cerrarSesion");
+		WebElement volver = driver.findElement(back);
+		volver.click();
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Aplicación de gestión de tareas", 20);
+		new PO_AutoLogin().rellenaFormulario(driver, "admin1", "admin1");
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Aplicación de gestión de tareas", 20);
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:borrarBase");
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:borrarSi", 20);
+		SeleniumUtils.click(driver, "form-principal:borrarSi");
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Aplicación de gestión de tareas", 20);
+	}
 	private void reiniciaBase(){
+		iniciaUsuario("admin1", "admin1");
+		
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:borrarBase");
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-principal:borrarSi", 20);
 		SeleniumUtils.click(driver, "form-principal:borrarSi");
@@ -116,9 +130,7 @@ public class PlantillaSDI2_Tests1617 {
     }
 	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
 	@Test
-    public void prueba04() {
-		iniciaUsuario("admin1", "admin1");
-		
+    public void prueba04() {		
 		//Reiniciamos la base
 		reiniciaBase();
 
@@ -207,6 +219,15 @@ public class PlantillaSDI2_Tests1617 {
 	//PR08: Ordenar por Login
 	@Test
     public void prueba08() {
+		
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id = By.id("form:tablalistadoMain:j_idt17");
+		
+		WebElement title = driver.findElement(id);
+		title.click();
+		
+		
 		iniciaUsuario("admin1", "admin1");
 		
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoUsuarios");
@@ -314,6 +335,8 @@ public class PlantillaSDI2_Tests1617 {
 		
 		//comprueba que estemos en el registro todavía
 		estoyEnLog();
+		
+		SeleniumUtils.textoPresentePagina(driver, "El usuario ya existe");
     }
 	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
 	@Test
@@ -691,7 +714,7 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 1", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR27: Crear una tarea sin categoría y comprobar que se muestra en la lista Inbox.
 	@Test
@@ -726,7 +749,7 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea Nueva", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR28: Crear una tarea con categoría categoria1 y fecha planeada Hoy y comprobar que se muestra en la lista Hoy.
 	@Test
@@ -763,7 +786,7 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea Nueva Cat1", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR29: Crear una tarea con categoría categoria1 y fecha planeada posterior a Hoy y comprobar que se muestra en la lista Semana.
 	@Test
@@ -802,7 +825,7 @@ public class PlantillaSDI2_Tests1617 {
 		
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea Nueva Futura", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
 		
     }
 	//PR30: Editar el nombre, y categoría de una tarea (se le cambia a categoría1) de la lista Inbox y comprobar que las tres pseudolista se refresca correctamente.
@@ -861,7 +884,7 @@ public class PlantillaSDI2_Tests1617 {
 		//Esperamos a que se cargue la pagina 
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Editada", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR31: Editar el nombre, y categoría (Se cambia a sin categoría) de una tarea de la lista Hoy y comprobar que las tres pseudolistas se refrescan correctamente.
 	@Test
@@ -936,7 +959,7 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
 		SeleniumUtils.EsperaCargaPagina(driver, "text", "Editada2", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR32: Marcar una tarea como finalizada. Comprobar que desaparece de las tres pseudolistas.
 	@Test
@@ -974,7 +997,7 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoSemana");
 		SeleniumUtils.EsperaCargaPaginaNoTexto(driver, "Tarea 1", 20); 
 		
-		prueba04();
+		reiniciaBaseB();
     }
 	//PR33: Salir de sesión desde cuenta de administrador.
 	@Test
