@@ -9,11 +9,16 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+
+import com.sdi.tests.pageobjects.PO_AltaForm;
+import com.sdi.tests.pageobjects.PO_AutoLogin;
+import com.sdi.tests.utils.SeleniumUtils;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
@@ -34,7 +39,7 @@ public class PlantillaSDI2_Tests1617 {
 		FirefoxBinary ffBinary = new FirefoxBinary(pathToBinary);
 		FirefoxProfile firefoxProfile = new FirefoxProfile();       
 		driver = new FirefoxDriver(ffBinary,firefoxProfile);
-		driver.get("http://localhost:8180/sdi2-n");
+		driver.get("http://localhost:8180/sdi2-13");
 		//Este código es para ejecutar con una versión instalada de Firex 46.0 
 		//driver = new FirefoxDriver();
 		//driver.get("http://localhost:8180/sdi2-n");			
@@ -43,7 +48,7 @@ public class PlantillaSDI2_Tests1617 {
 	public void end()
 	{
 		//Cerramos el navegador
-		//driver.quit();
+		driver.quit();
 	}
 
 	//PRUEBAS
@@ -127,17 +132,96 @@ public class PlantillaSDI2_Tests1617 {
 	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
 	@Test
     public void prueba16() {
-		assertTrue(false);
+		
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 15); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoInbox");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 10); 
+		
+		//Llega al listados con exito ahora necesito q pagine
+		//By id = By.xpath();
+		
+		//WebElement page2 = driver.findElement(id);
+		//page2.click();
+		
+		//Esperamos a que se cargue la pagina 
+		//SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 9", 10); 
     }
 	//PR17: Funcionamiento correcto de la ordenación por fecha planeada.
 	@Test
     public void prueba17() {
-		assertTrue(false);
+		
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 20); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoInbox");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id = By.xpath("//*[contains(@id,'sortPlanned')]");
+		
+		driver.findElement(id).click();
+		
+		//llega a clicar el filtrado
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 1", 10); 
     }
 	//PR18: Funcionamiento correcto del filtrado.
 	@Test
     public void prueba18() {
-		assertTrue(false);
+		//Pinchamos la opción de menu
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:iniciarSession");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "login", 10); 
+
+		//Vamos a rellenar el formulario
+		new PO_AutoLogin().rellenaFormulario(driver, "user1", "user1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "form-cabecera:misubmenu1", 10); 
+		
+		//Pinchamos la opción de menu Alta Alumno
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:misubmenu1", "form-cabecera:listadoInbox");
+
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "id", "tablalistadoMain", 20); 
+		
+		By id = By.id("form:tablalistadoMain:filterTitle:filter");
+		
+		WebElement title = driver.findElement(id);
+		title.click();
+		title.clear();
+		title.sendKeys("Tarea 1");
+		
+		//Esperamos a que se cargue la pagina 
+		SeleniumUtils.EsperaCargaPagina(driver, "text", "Tarea 1", 20); 
+		
     }
 	//PR19: Funcionamiento correcto de la ordenación por categoría.
 	@Test
